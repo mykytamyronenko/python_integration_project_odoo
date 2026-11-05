@@ -1,0 +1,15 @@
+# Environnement virtuel
+.venv/
+
+# Variables d'environnement (identifiants de la db)
+.env
+
+# Cache Python
+pycache/
+*.py[cod]
+
+# Éditeurs / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

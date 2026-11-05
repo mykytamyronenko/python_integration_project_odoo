@@ -1,0 +1,24 @@
+# communication avec DB
+psycopg[binary]==3.3.6
+# gestion du fichier d'environnement
+python-dotenv==1.2.4
+
+
+# python -m venv .venv
+# pip install -r requirements.txt
+# pip install "psycopg[binary]"
+# pip install python-dotenv
+
+# BBL
+# DAL
+
+"""
+Mini-ERP pour une entreprise commerciale
+Intitulé : Conception et développement d'un système intégré de gestion
+commerciale pour une PME.
+
+Contexte:
+Une PME spécialisée dans la vente de matériel informatique souhaite informatiser
+ses activités afin de centraliser la gestion de ses clients, produits, commandes,
+fournisseurs, factures, etc.
+"""
