@@ -1,10 +1,12 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from decimal import Decimal
+
 
 @dataclass
 class Product:
     name: str
     reference: str
-    purchase_price: float
-    sale_price: float
-    stock_quantity: int
+    purchase_price: Decimal
+    sale_price: Decimal
+    stock_quantity: int = 0
     id: int | None = None

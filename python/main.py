@@ -5,7 +5,7 @@ from psycopg import Error as DatabaseError
 
 from db.db import Database
 from exceptions import AppError, ValidationError
-from services import auth_service, user_service
+from services import auth_service, user_service, customer_service, product_service, stock_movement_service, supplier_service
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +53,7 @@ if __name__ == "__main__":
                             email = input("Email: ")
                             password = getpass.getpass("Password: ")
                             current_user = auth_service.login(email, password)
+                            print()
                             print(
                                 f"Welcome, {current_user.full_name} "
                                 f"({current_user.role.value})."
