@@ -16,7 +16,7 @@ class Database:
         return cls._instance
 
     @property
-    def connection(self):
+    def connection(self) -> psycopg.Connection:
         if self._connection is None or self._connection.closed:
             self._connection = psycopg.connect(
                 dbname=os.getenv("DB_NAME"),
@@ -28,7 +28,6 @@ class Database:
             )
 
         return self._connection
-
 
 
     def close(self):
