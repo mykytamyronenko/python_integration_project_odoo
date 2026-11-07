@@ -21,3 +21,23 @@ def get_all() -> list[Product]:
     with Database().connection.cursor() as cursor:
         cursor.execute(f"SELECT {_COLUMNS} FROM products ORDER BY id_products")
         return [_to_product(row) for row in cursor.fetchall()]
+
+
+def get_by_id(product_id: int, for_update: bool = False) -> Product | None:
+    query = f"SELECT {_COLUMNS} FROM products WHERE id_products = %s"
+    if for_update:
+        query += " FOR UPDATE"
+
+    with Database().connection.cursor() as cursor:
+        cursor.execute(query, (product_id,))
+        row = cursor.fetchone()
+    return _to_product(row) if row else None
+
+
+def decrease_stock(product_id: int, quantity: int) -> None:
+    with Database().connection.cursor() as cursor:
+        cursor.execute(
+            "UPDATE products SET stock_quantity = stock_quantity - %s "
+            "WHERE id_products = %s",
+            (quantity, product_id),
+        )

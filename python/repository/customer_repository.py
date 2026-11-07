@@ -37,3 +37,12 @@ def get_all() -> list[Customer]:
     with Database().connection.cursor() as cursor:
         cursor.execute(f"SELECT {_COLUMNS} FROM customers ORDER BY id_customers")
         return [_to_customer(row) for row in cursor.fetchall()]
+
+
+def get_by_id(customer_id: int) -> Customer | None:
+    with Database().connection.cursor() as cursor:
+        cursor.execute(
+            f"SELECT {_COLUMNS} FROM customers WHERE id_customers = %s", (customer_id,)
+        )
+        row = cursor.fetchone()
+    return _to_customer(row) if row else None

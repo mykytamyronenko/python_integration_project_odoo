@@ -1,8 +1,8 @@
 from db.db import Database
-from models.stock_movement import MovementType, StockMovement
+from models.stock_movement import MovementType, StockMovement, StockMovementDetail
 
 
-def _to_stock_detail(row: tuple) -> StockMovement:
+def _to_detail(row: tuple) -> StockMovementDetail:
     (
         id_stock_movements,
         product_reference,
@@ -13,7 +13,7 @@ def _to_stock_detail(row: tuple) -> StockMovement:
         movement_date,
     ) = row
 
-    return StockMovement(
+    return StockMovementDetail(
         id=id_stock_movements,
         product_reference=product_reference,
         product_name=product_name,
@@ -24,7 +24,7 @@ def _to_stock_detail(row: tuple) -> StockMovement:
     )
 
 
-def get_all_stock_details() -> list[StockMovement]:
+def get_all_details() -> list[StockMovementDetail]:
     with Database().connection.cursor() as cursor:
         cursor.execute(
             """
@@ -41,4 +41,31 @@ def get_all_stock_details() -> list[StockMovement]:
             ORDER BY sm.movement_date DESC, sm.id_stock_movements DESC
             """
         )
-        return [_to_stock_detail(row) for row in cursor.fetchall()]
+        return [_to_detail(row) for row in cursor.fetchall()]
+
+
+def create(movement: StockMovement) -> StockMovement:
+    with Database().connection.cursor() as cursor:
+        cursor.execute(
+            """
+            INSERT INTO stock_movements (products_id, users_id, quantity, movement_type)
+            VALUES (%s, %s, %s, %s)
+            RETURNING id_stock_movements, movement_date
+            """,
+            (
+                movement.products_id,
+                movement.users_id,
+                movement.quantity,
+                movement.movement_type.value,
+            ),
+        )
+        id_stock_movements, movement_date = cursor.fetchone()
+
+    return StockMovement(
+        id=id_stock_movements,
+        products_id=movement.products_id,
+        users_id=movement.users_id,
+        quantity=movement.quantity,
+        movement_type=movement.movement_type,
+        movement_date=movement_date,
+    )

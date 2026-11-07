@@ -30,6 +30,10 @@ class Database:
         return self._connection
 
 
+    def transaction(self):
+        return self.connection.transaction()
+
+
     def close(self):
         if self._connection is not None and not self._connection.closed:
             self._connection.close()
